@@ -20,12 +20,15 @@ import {
   TermsandCondition,
   AboutUs,
 } from "./pages";
+import PatientData from "./pages/PatientData";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
+          <Route path="/PatientData" element={<PatientData />} />
           <Route path="/joinBusiness" element={<RegisterBusiness />} />
           <Route path="/loginBusiness" element={<LogInBusiness />} />
           <Route path="/joinCustomer" element={<RegisterCustomer />} />

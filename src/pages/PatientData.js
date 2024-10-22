@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import DonutChart from "./donutChart";
 import LineChart from "./barChart";
 import BarChart from "./barChart";
@@ -10,7 +10,8 @@ import Loader from "./loader";
 import Navbar from "./Navbar";
 
 function PatientData() {
-  const navigate = useNavigate();
+  const location=useLocation();
+  const data=location.state;
   const customer = useSelector((store) => store.customer);
   const [hashMap, setHashMap] = useState({
   });
@@ -24,6 +25,8 @@ function PatientData() {
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
+    console.log("newly added data");
+    console.log(data);
   }, []);
 
   const getResponse = async () => {
@@ -64,7 +67,7 @@ function PatientData() {
 
   };
   useEffect(() => {
-     getResponse();
+    //  getResponse();
   }, []);
 
   const connectWallet = async () => {
@@ -81,7 +84,7 @@ function PatientData() {
   };
 
   useEffect(() => {
-    connectWallet();
+    // connectWallet();
   }, []); // means at startup !!
   return (
     // <div>Hello</div>
@@ -90,8 +93,8 @@ function PatientData() {
       <Navbar/>
       <div className="w-[95%]  bg-white p-5 rounded-md shadow-md shadow-gray-600  ">
         <div className="flex justify-between bg-indigo-500 px-4 py-3 shadow-md shadow-gray-300 rounded-md">
-          <p className=" text-white text-[20px]">{response.firstName}</p>
-          <p className=" text-white text-[20px]">{response.userEmail}</p>
+          <p className=" text-white text-[20px]">{response.id}</p>
+          <p className=" text-white text-[20px]">{response.age}</p>
         </div>
         <div style={{ display:'flex',width: '400px', height: '350px' }} className="mt-8 ml-[250px]">
           <DonutChart data={businessess}></DonutChart>
@@ -115,17 +118,17 @@ function PatientData() {
 
         <motion.button
           onClick={() => {
-            navigate("/getReward");
+            // navigate("/getReward");
           }}
           whileTap={{ scale: 0.9 }}
           type="button"
-          className="mt-16 bg-violet-700 px-5 py-2 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300"
+          className="mt-16 bg-emrald-700 px-5 py-2 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300"
         >
-          Purchase Product
+          Make Prediction
         </motion.button>
         <motion.button
           onClick={() => {
-            navigate("/transactionHistory");
+            // navigate("/transactionHistory");
           }}
           whileTap={{ scale: 0.9 }}
           type="button"
