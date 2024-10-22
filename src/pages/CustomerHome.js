@@ -80,27 +80,28 @@ function CustomerHome() {
           // Prompt user for account connections
           await provider.send("eth_requestAccounts", []);
           const signer = provider.getSigner();
-
-          const contractAddress = "0x06441b211a8729B40FE15955F9A58b2F5829d022"; // Replace with your smart contract address
+          const contractAddress = "0xeBCd84C91a74A7b3a18ab02B246E57E89988Ab5A"; // Replace with your smart contract address
           const contractABI = Abi.contractABI; // Replace with your smart contract ABI
 
-          // const contract = new ethers.Contract(
-          //   contractAddress,
-          //   contractABI,
-          //   signer
-          // );
-
-          // const add = await signer.getAddress();
-          // const txResponse = await tx.wait();
-          // console.log("Transaction Response : ", txResponse.transactionHash);
-
-          // const hash = txResponse.transactionHash;
-          // const ltAddress = await contract.getBusinessCoin(add);
-          // console.log("LT Address:", ltAddress);
-
-          toast.success("Data Fetched Successfully !");
+          // Create a contract instance
+          const contract = new ethers.Contract(contractAddress, contractABI, signer);
+          
+          // Call the getData method
+          async function retrievePatientData() {
+              try {
+                  setIsLoading(true);
+                  const data = await contract.getData(); // Call the function
+                  setIsLoading(false);
+                  console.log("Retrieved data:", data); // Log the retrieved data
+              } catch (error) {
+                  setIsLoading(false);
+                  console.error("Error retrieving data:", error);
+                  toast.error("Data Fetching Error !!");
+              }
+          }
+          // Example usage
+          await retrievePatientData();
         } catch (error) {
-          toast.error("Data Fetching Error !!");
           console.log(error);
         }
       } else {
