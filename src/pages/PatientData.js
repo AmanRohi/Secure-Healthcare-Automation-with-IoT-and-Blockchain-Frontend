@@ -20,6 +20,7 @@ function PatientData() {
   
   const [businessess,setBusinessess]=useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  
 
   useEffect(() => {
     // Simulate a loading delay
@@ -87,6 +88,9 @@ function PatientData() {
     return readings;
   }
 
+  const handleChange = (event) => {
+    setSelectedDevice(event.target.value);
+    };
   useEffect(() => {
     // connectWallet();
   }, []); // means at startup !!
@@ -95,31 +99,58 @@ function PatientData() {
     <div>
     {isLoading===true ? <Loader/> : <div className="w-screen h-screen   flex flex-col items-center gap-4">
       <Navbar/>
-      <div className="w-[95%]  bg-white p-5 rounded-md shadow-md shadow-gray-600  ">
-        <div className="flex justify-between bg-emerald-500 px-4 py-3 shadow-md shadow-gray-300 rounded-md">
-          <p className=" text-white text-[20px]">{response.id}</p>
-          <p className=" text-white text-[20px]">{response.age}</p>
-        </div>
-        <div style={{ display:'flex',width: '400px', height: '350px' }} className="mt-8 ml-[250px]">
-          <LineChart timeSeriesData={getTimeSeriesData()}></LineChart>
-          <BarChart data={getIotDeviceData()} ></BarChart>
-        </div>
-        <div className="mt-12   p-2 ">
-          <p className="bg-emerald-500 px-5 py-1 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300">
-            Predict Disease
-          </p>
-          <div className="mt-4 flex gap-2 flex-wrap ">
-            {businessess.map((res) => {
-              return (
-                <div className=" p-2 px-3 h-max bg-gray-500/95 rounded-md text-white justify-center  flex  gap-1 text-[22px]">
-                  <p>{res.businessDetails.name}</p>
-                  <p>{res.totalCount}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+      
+      <div className="w-[95%] bg-white p-5 rounded-md shadow-md shadow-gray-600">
+  <div className="flex justify-between items-center bg-emerald-500 px-4 py-3 shadow-md shadow-gray-300 rounded-md">
+    <p className="text-white text-[20px]">{response.id}</p>
+    <p className="text-white text-[20px]">{response.age}</p>
+
+    {/* Dropdown Menu */}
+    <div className="relative">
+      
+      <div >
+        <select
+        value={selectedDevice}
+        onChange={handleChange}
+        className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-emerald-500 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+      >
+        <option value="device-1">Device 1</option>
+        <option value="device-2">Device 2</option>
+        <option value="device-3">Device 3</option>
+        <option value="device-4">Device 4</option>
+        <option value="device-5">Device 5</option>
+      </select>
+
+
       </div>
+    </div>
+  </div>
+
+  <div
+    style={{ display: 'flex', width: '400px', height: '350px' }}
+    className="mt-8 ml-[250px]"
+  >
+    <LineChart timeSeriesData={getTimeSeriesData()} />
+    <BarChart data={getIotDeviceData()} />
+  </div>
+
+  <div className="mt-12 p-2">
+    <p className="bg-emerald-500 px-5 py-1 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300">
+      Predict Disease
+    </p>
+    <div className="mt-4 flex gap-2 flex-wrap">
+      {businessess.map((res) => {
+        return (
+          <div className="p-2 px-3 h-max bg-gray-500/95 rounded-md text-white justify-center flex gap-1 text-[22px]">
+            <p>{res.businessDetails.name}</p>
+            <p>{res.totalCount}</p>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</div>
+
     </div>}
     </div>
   );
