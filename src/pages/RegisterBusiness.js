@@ -16,7 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const RegisterBusiness = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-
+  const [dataFile,setDataFile]=useState("");
   useEffect(() => {
     // Simulate a loading delay
     setTimeout(() => {
@@ -85,55 +85,24 @@ const RegisterBusiness = () => {
         const contractAddress = "0x06441b211a8729B40FE15955F9A58b2F5829d022"; // Replace with your smart contract address
         const contractABI = Abi.contractABI; // Replace with your smart contract ABI
 
-        const contract = new ethers.Contract(
-          contractAddress,
-          contractABI,
-          signer
-        );
+        // const contract = new ethers.Contract(
+        //   contractAddress,
+        //   contractABI,
+        //   signer
+        // );
 
-        const add = await signer.getAddress();
+        // const add = await signer.getAddress();
+        // const txResponse = await tx.wait();
+        // console.log("Transaction Response : ", txResponse.transactionHash);
 
-        const tx = await contract.regBusiness(
-          businessData.name,
-          businessData.email,
-          add, // Sender's address
-          businessData.tokenSymbol, // Replace with the actual token symbol
-          18 // Replace with the actual decimal value
-        );
+        // const hash = txResponse.transactionHash;
+        // const ltAddress = await contract.getBusinessCoin(add);
+        // console.log("LT Address:", ltAddress);
 
-        setIsLoading(true);
-        const txResponse = await tx.wait();
-        console.log("Transaction Response : ", txResponse.transactionHash);
-
-        const hash = txResponse.transactionHash;
-        const ltAddress = await contract.getBusinessCoin(add);
-        console.log("LT Address:", ltAddress);
-
-        const password = businessData.pwd;
-        const businessWalletAddress = add;
-        const email = businessData.email;
-        const name = businessData.name;
-        // Send transaction hash and other data to your backend
-        const response = await axios.post(
-          "https://flipkartbackend-un9n.onrender.com/registerBusiness",
-          {
-            signedTransaction: hash,
-            businessWalletAddress,
-            name,
-            email,
-            pwd: password,
-            tokenContractAddress: ltAddress,
-            tokenSymbol: businessData.tokenSymbol,
-          }
-        );
-
-        // Handle the response from the backend
-        console.log(response.data); // This should contain user details and access token
-        dispatch(setBusiness(response));
-
-        setIsLoading(false);
-        navigate("/businessHome");
+        toast.success("Data File Uploaded !");
+        setDataFile("")
       } catch (error) {
+        toast.error("Data File Upload Unsuccessfull !");
         console.log(error);
       }
     } else {
@@ -162,39 +131,18 @@ const RegisterBusiness = () => {
         >
           <Navbar />
           <div className="w-[30%] drop-shadow-xl bg-white shadow-lg shadow-gray-800 rounded-lg flex flex-col gap-4">
-            <h2 className="text-center bg-indigo-500 py-3 text-white text-[20px] rounded-t-lg">
-              Register Your Business
+            <h2 className="text-center bg-emerald-500 py-3 text-white text-[20px] rounded-t-lg">
+              Enter the Data File 
             </h2>
             <form onSubmit={handleSubmit} className="p-12">
+            <label>Upload Data File (.csv or .xlsx format)</label>
               <input
-                type="text"
+                type="file"
                 id="businessName"
-                placeholder="Enter your Business Name"
-                value={businessData.name}
+                placeholder="Upload in .csv or .xlsx format"
+                value={dataFile}
                 onChange={(e) =>
-                  setBusinessData({ ...businessData, name: e.target.value })
-                }
-                required
-              />
-
-              <input
-                type="email"
-                id="businessEmail"
-                placeholder="Enter your Business Email"
-                value={businessData.email}
-                onChange={(e) =>
-                  setBusinessData({ ...businessData, email: e.target.value })
-                }
-                required
-              />
-
-              <input
-                type="text"
-                id="pwd"
-                placeholder="Enter your Password"
-                value={businessData.pwd}
-                onChange={(e) =>
-                  setBusinessData({ ...businessData, pwd: e.target.value })
+                  setDataFile(()=>e.target.value)
                 }
                 required
               />
@@ -208,37 +156,34 @@ const RegisterBusiness = () => {
             onChange={(e) => setBusinessData({ ...businessData, businessWalletAddress: e.target.value })}
             required
           /> */}
-              <input
-                type="text"
-                id="symb"
-                placeholder="Enter your Token Symbol"
-                value={businessData.tokenSymbol}
-                onChange={(e) =>
-                  setBusinessData({
-                    ...businessData,
-                    tokenSymbol: e.target.value,
-                  })
-                }
-                required
-              />
-
               {/* Add more input fields for other details */}
               <div className="flex flex-col mt-6  gap-3">
                 <motion.button
                   whileTap={{ scale: 0.9 }}
                   type="submit"
-                  className="px-1 py-3 bg-indigo-500 rounded-md text-white text-[18px]  shadow-md shadow-blue-400"
+                  className="px-1 py-3 bg-emerald-500 rounded-md text-white text-[18px]  shadow-md shadow-blue-400"
                 >
-                  Register
+                  Upload
                 </motion.button>
-                <p className=" text-center p-1 ">
-                  Already Registered ? <Link to="/loginBusiness">Sign In</Link>
-                </p>
               </div>
             </form>
           </div>
         </div>
       )}
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
     </div>
   );
 };

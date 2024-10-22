@@ -21,6 +21,46 @@ function PatientData() {
   const [businessess,setBusinessess]=useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
+  const predictDisease=async()=>{
+    
+    const url = "http://127.0.0.1:3002/predict_rfc";
+    const response = await axios.post(
+        url,
+        {
+            "ID": 1,
+            "AGE": 58.0,
+            "PackHistory": 77.0,
+            "COPDSEVERITY": 60.0,
+            "MWT1": 120.0,
+            "MWT2": 120.0,
+            "MWT1Best": 120.0,
+            "FEV1": 1.21,
+            "FEV1PRED": 36.0,
+            "FVC": 2.4,
+            "FVCPRED": 98.0,
+            "CAT": 25.0,
+            "HAD": 8.0,
+            "SGRQ": 69.55,
+            "AGEquartiles": 4,
+            "copd": 3,
+            "gender": 1,
+            "smoking": 2,
+            "Diabetes": 1,
+            "muscular": 2,
+            "hypertension": 1,
+            "AtrialFib": 0,
+            "IHD": 0
+        },
+        {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    );
+
+      console.log(response.data.rfc_prediction);
+      window.alert("Copd Level : "+response.data.rfc_prediction[0]);
+  }
 
   useEffect(() => {
     // Simulate a loading delay
@@ -135,9 +175,9 @@ function PatientData() {
   </div>
 
   <div className="mt-12 p-2">
-    <p className="bg-emerald-500 px-5 py-1 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300">
+    <button onClick={predictDisease} className="bg-emerald-500 px-5 py-1 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300">
       Predict Disease
-    </p>
+    </button>
     <div className="mt-4 flex gap-2 flex-wrap">
       {businessess.map((res) => {
         return (

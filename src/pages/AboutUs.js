@@ -11,7 +11,7 @@ function AboutUs() {
         shadow-gray-500 drop-shadow-2xl flex items-center flex-col p-4 "
         >
           <img
-            src="https://media.licdn.com/dms/image/C4E03AQGr4Lvjdrbxtg/profile-displayphoto-shrink_200_200/0/1633275043485?e=1697673600&v=beta&t=ci0F-G5mm0ysYyDvZc9KHVBX8NERcFKIqi_b6EXmhG8"
+            src="https://media.licdn.com/dms/image/v2/C4E03AQGr4Lvjdrbxtg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1633275044389?e=1735171200&v=beta&t=uAACzpubOk7kAq-6yQSHJPxSTzpKeE7mJP-Ir9pCgpA"
             className="rounded-full w-[150px] h-[150px]"
           />
           <p className=" text-[22px] tracking-wide">Aman Rohi</p>
@@ -29,7 +29,7 @@ function AboutUs() {
         shadow-gray-500 drop-shadow-2xl flex items-center flex-col p-4 "
         >
           <img
-            src="https://media.licdn.com/dms/image/D4D03AQGOQWd0B5yJ1g/profile-displayphoto-shrink_200_200/0/1692106118170?e=1697673600&v=beta&t=fEi5jz-Cn43XoSuA1NWzExB_1Fr7VlHrAazytsgUkz4"
+            src="https://media.licdn.com/dms/image/v2/D5603AQH6bbY_pAapPg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1728405147162?e=1735171200&v=beta&t=SVyMtCtp-3IekO0E0t8ir2sgDncLluMuzH__tEcWAnQ"
             className="rounded-full w-[150px] h-[150px]"
           />
           <p className=" text-[22px] tracking-wide">Lakshya Sharma</p>
@@ -47,13 +47,13 @@ function AboutUs() {
         shadow-gray-500 drop-shadow-2xl flex items-center flex-col p-4 "
         >
           <img
-            src="https://media.licdn.com/dms/image/C4E03AQFWUKXgIjINJQ/profile-displayphoto-shrink_200_200/0/1647357342483?e=1697673600&v=beta&t=_ll9dDYBecfh6m3Zg5W3KMCOc66SEuB7vCjHAIOt-co"
+            src="https://media.licdn.com/dms/image/v2/D4D03AQEWxguRshwtDQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1667560564191?e=1735171200&v=beta&t=cwbzWZO79RaC7bOG_qhhW9lfgAnyptlkF6o5iFAWqho"
             className="rounded-full w-[150px] h-[150px]"
           />
-          <p className=" text-[22px] tracking-wide">Aakshat Malhotra</p>
+          <p className=" text-[22px] tracking-wide">Arpit</p>
           <p className="text-[17px]">B.Tech , CSE</p>
           <p>NSUT</p>
-          <Link to="https://www.linkedin.com/in/aakshat-malhotra-5019a821a/">
+          <Link to="https://www.linkedin.com/in/arpit-03a368246/">
             <img
               src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
               className="w-[30px] h-[30px] mt-2"
