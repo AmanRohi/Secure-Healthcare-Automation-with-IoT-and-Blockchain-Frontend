@@ -8,6 +8,7 @@ import LineChart from "./barChart";
 import BarChart from "./barChart";
 import Loader from "./loader";
 import Navbar from "./Navbar";
+import PatientData from "./PatientData";
 import { ToastContainer, toast } from "react-toastify";
 
 function CustomerHome() {
