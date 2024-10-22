@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import DonutChart from "./donutChart";
 import LineChart from "./barChart";
 import BarChart from "./barChart";
@@ -12,7 +11,6 @@ import PatientData from "./PatientData";
 import { ToastContainer, toast } from "react-toastify";
 
 function CustomerHome() {
-  const navigate = useNavigate();
   const customer = useSelector((store) => store.customer);
   const [hashMap, setHashMap] = useState({
   });
@@ -33,50 +31,9 @@ function CustomerHome() {
     if(isLoading==false){
       toast.success("Signed In Successfully");
     }
+    const accessToken=customer.accessToken;
+    console.log(accessToken);
   },[isLoading])
-
-  
-
-  // const getResponse = async () => {
-  //   const accessToken = customer.data.accessToken;
-    
-  //   console.log("Here it is : ",accessToken);
-  //   const rr = await axios.post(
-  //     "https://flipkartbackend-un9n.onrender.com/getUserDetails",{},
-  //     {
-  //       headers: {
-  //         Authorization: "Bearer " + accessToken,
-  //         // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGRkNDY3M2M2ODliMzRkMzY5ZmRlZGYiLCJyb2xlIjoiQ3VzdG9tZXIiLCJpYXQiOjE2OTIyMjMwOTF9.1WFN8JJAVQUkwFVr4a1GA1HfhyGFMFLPIoJHhLdeMpY`, // Provide your access token
-  //       },
-  //     }
-  //   );
-
-    
-  //   setResponse(rr.data);
-
-  //   const rr2 = await axios.post(
-  //     "https://flipkartbackend-un9n.onrender.com/getBusinessDetails/byUser",{
-  //       businessess:rr.data.loyaltyPoints
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: "Bearer " + accessToken,
-  //         // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGRkNDY3M2M2ODliMzRkMzY5ZmRlZGYiLCJyb2xlIjoiQ3VzdG9tZXIiLCJpYXQiOjE2OTIyMjMwOTF9.1WFN8JJAVQUkwFVr4a1GA1HfhyGFMFLPIoJHhLdeMpY`, // Provide your access token
-  //       },
-  //     }
-  //   );
-
-
-  //   setBusinessess(rr2.data);
-
-  //   console.log("Here I am With data : ",rr2.data);
-
-  //   console.log("I AM GOGO");
-
-  // };
-  // useEffect(() => {
-  //    getResponse();
-  // }, []);
 
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -91,18 +48,20 @@ function CustomerHome() {
     }
   };
 
-  // useEffect(() => {
-  //   connectWallet();
-  // }, []); // means at startup !!
-
-
   const handleSubmit = async ()=>{
-
+    const accessToken=customer.accessToken;
+    console.log(accessToken);
     try{
       const response = await axios.post(
-        "http://localhost:3000/getPatientData",
+        "http://localhost:3000/getPatientDetails",
         {
           pId
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + accessToken,
+            // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGRkNDY3M2M2ODliMzRkMzY5ZmRlZGYiLCJyb2xlIjoiQ3VzdG9tZXIiLCJpYXQiOjE2OTIyMjMwOTF9.1WFN8JJAVQUkwFVr4a1GA1HfhyGFMFLPIoJHhLdeMpY`, // Provide your access token
+          },
         }
       );
 
@@ -110,7 +69,6 @@ function CustomerHome() {
       console.log(response.data); // This should contain user details and access token
       
       toast.success("Patient Data Retrieved Successfully");
-      navigate("/PatientData");
     } catch (error) {
       toast.error(error);
       console.log(error);
