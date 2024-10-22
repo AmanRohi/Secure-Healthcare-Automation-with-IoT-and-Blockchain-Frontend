@@ -96,7 +96,7 @@ function PatientData() {
     {isLoading===true ? <Loader/> : <div className="w-screen h-screen   flex flex-col items-center gap-4">
       <Navbar/>
       <div className="w-[95%]  bg-white p-5 rounded-md shadow-md shadow-gray-600  ">
-        <div className="flex justify-between bg-indigo-500 px-4 py-3 shadow-md shadow-gray-300 rounded-md">
+        <div className="flex justify-between bg-emerald-500 px-4 py-3 shadow-md shadow-gray-300 rounded-md">
           <p className=" text-white text-[20px]">{response.id}</p>
           <p className=" text-white text-[20px]">{response.age}</p>
         </div>
@@ -105,8 +105,8 @@ function PatientData() {
           <BarChart data={getIotDeviceData()} ></BarChart>
         </div>
         <div className="mt-12   p-2 ">
-          <p className="bg-blue-700 px-5 py-1 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300">
-            Loyalty Points
+          <p className="bg-emerald-500 px-5 py-1 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300">
+            Predict Disease
           </p>
           <div className="mt-4 flex gap-2 flex-wrap ">
             {businessess.map((res) => {
@@ -119,27 +119,6 @@ function PatientData() {
             })}
           </div>
         </div>
-
-        <motion.button
-          onClick={() => {
-            // navigate("/getReward");
-          }}
-          whileTap={{ scale: 0.9 }}
-          type="button"
-          className="mt-16 bg-emrald-700 px-5 py-2 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300"
-        >
-          Make Prediction
-        </motion.button>
-        <motion.button
-          onClick={() => {
-            // navigate("/transactionHistory");
-          }}
-          whileTap={{ scale: 0.9 }}
-          type="button"
-          className="ml-5 bg-violet-700 px-5 py-2 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300"
-        >
-          Transaction History
-        </motion.button>
       </div>
     </div>}
     </div>
