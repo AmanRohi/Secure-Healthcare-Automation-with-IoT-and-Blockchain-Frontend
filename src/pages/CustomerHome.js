@@ -8,9 +8,11 @@ import BarChart from "./barChart";
 import Loader from "./loader";
 import Navbar from "./Navbar";
 import PatientData from "./PatientData";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 function CustomerHome() {
+  const navigate = useNavigate();
   const customer = useSelector((store) => store.customer);
   const [hashMap, setHashMap] = useState({
   });
@@ -67,8 +69,8 @@ function CustomerHome() {
 
       // Handle the response from the backend
       console.log(response.data); // This should contain user details and access token
-      
-      toast.success("Patient Data Retrieved Successfully");
+      navigate("/PatientData",{state:response.data} );
+      // toast.success("Patient Data Retrieved Successfully");
     } catch (error) {
       toast.error(error);
       console.log(error);
@@ -87,30 +89,24 @@ function CustomerHome() {
         <h2 className="text-center bg-emerald-400 py-3 text-white text-[20px] rounded-t-lg">
           Search for Patient
         </h2>
-        <form onSubmit={handleSubmit} className="p-12">
+        <form onSubmit={(e)=>{
+          e.preventDefault();
+          handleSubmit();
+        }} className="p-12">
           <input
             type="text"
             id="pID"
             placeholder="Enter Patient Id"
             value={pId}
             onChange={(e) =>
+              
               setPId(()=>e.target.value)
             }
             required
           />
           
 
-          {/* <label htmlFor="wallet">Business Wallet Address</label>
-          <input
-            type="text"
-            id="wallet"
-            placeholder="Enter your wallet address"
-            value={businessData.businessWalletAddress}
-            onChange={(e) => setBusinessData({ ...businessData, businessWalletAddress: e.target.value })}
-            required
-          /> */}
-
-          {/* Add more input fields for other details */}
+          
 
           <div className="flex flex-col mt-6  gap-3">
             <motion.button
