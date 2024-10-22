@@ -8,6 +8,7 @@ import { mnemonicToEntropy } from "ethers/lib/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { setCustomer, setBusiness } from "../reducer";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import Navbar from "./Navbar";
 import Abi from "./Abi";
 const LoginCustomer = () => {
@@ -76,7 +77,7 @@ const LoginCustomer = () => {
 
         // Send transaction hash and other data to your backend
         const response = await axios.post(
-          "https://flipkartbackend-un9n.onrender.com/loginDoctor",
+          "http://localhost:3000/loginDoctor",
           {
             email : email,
             pwd: pwd,
@@ -86,8 +87,10 @@ const LoginCustomer = () => {
         // Handle the response from the backend
         console.log(response.data); // This should contain user details and access token
         dispatch(setCustomer(response));
+        toast.success("Login Successfull");
         navigate("/customerHome");
       } catch (error) {
+        toast.error(error);
         console.log(error);
       }
     } 
@@ -146,6 +149,20 @@ const LoginCustomer = () => {
           </div>
         </form>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
     </div>
   );
 };

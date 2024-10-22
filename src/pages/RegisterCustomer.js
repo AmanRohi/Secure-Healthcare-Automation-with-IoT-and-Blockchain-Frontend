@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCustomer, setBusiness } from "../reducer";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import Navbar from "./Navbar";
 import Abi from "./Abi";
 import Loader from "./loader";
@@ -118,19 +119,21 @@ const RegisterCustomer = () => {
 
         // Send transaction hash and other data to your backend
         const response = await axios.post(
-          "https://flipkartbackend-un9n.onrender.com/registerDoctor",
+          "http://localhost:3000/registerDoctor",
           {
             name,
             email,
-            pwd: pwd,
+            pwd,
           }
         );
 
         // Handle the response from the backend
         console.log(response.data); // This should contain user details and access token
         dispatch(setCustomer(response));
+        toast.success("Doctor Registered Successfully");
         navigate("/customerHome");
       } catch (error) {
+        toast.error(error);
         console.log(error);
       }
     // } else {
@@ -225,6 +228,20 @@ const RegisterCustomer = () => {
           </div>
         </div>
       )}
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
     </div>
   );
 };
