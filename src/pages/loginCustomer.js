@@ -15,7 +15,7 @@ const LoginCustomer = () => {
   const dispatch = useDispatch();
   const [customerData, setCustomerData] = useState({
     pwd: "",
-    userWalletAddress: "",
+    email: "",
     // Add more fields as needed
   });
 
@@ -33,52 +33,52 @@ const LoginCustomer = () => {
   };
 
   useEffect(() => {
-    connectWallet();
+    // connectWallet();
   }, []); // means at startup !!
 
   // "0x1c9A0af0b1a14DaD32D93e9593740407Ac691BAe"
-  const getBusinessBalance = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    // Prompt user for account connections
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    const add = await signer.getAddress();
-    const tokenABI = Abi.tokenABI;
-    const flipkartAddress = "0x37144a383A69d528A1176Ba237a0F860dA160141";
+  // const getBusinessBalance = async () => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   // Prompt user for account connections
+  //   await provider.send("eth_requestAccounts", []);
+  //   const signer = provider.getSigner();
+  //   const add = await signer.getAddress();
+  //   const tokenABI = Abi.tokenABI;
+  //   const flipkartAddress = "0x37144a383A69d528A1176Ba237a0F860dA160141";
 
-    // idhar add token contract address by taking it from the :
-    // database itself !!
-    const tokenContract = new ethers.Contract(
-      "0x5eA776A5665dABbE9E3e1279F09F46ebc1929A00",
-      tokenABI,
-      provider
-    );
+  //   // idhar add token contract address by taking it from the :
+  //   // database itself !!
+  //   const tokenContract = new ethers.Contract(
+  //     "0x5eA776A5665dABbE9E3e1279F09F46ebc1929A00",
+  //     tokenABI,
+  //     provider
+  //   );
 
-    const tokenBalance = await tokenContract.balanceOf(flipkartAddress);
-    console.log("Flip ", tokenBalance.toString());
-  };
+  //   const tokenBalance = await tokenContract.balanceOf(flipkartAddress);
+  //   console.log("Flip ", tokenBalance.toString());
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await connectWallet();
-    if (window.ethereum) {
+    // await connectWallet();
+    // if (window.ethereum) {
       try {
         // Request account access if needed
-        await window.ethereum.enable();
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // Prompt user for account connections
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
+        // await window.ethereum.enable();
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        // // Prompt user for account connections
+        // await provider.send("eth_requestAccounts", []);
+        // const signer = provider.getSigner();
 
-        const add = await signer.getAddress();
+        // const add = await signer.getAddress();
 
         const pwd = customerData.pwd;
-        const userWalletAddress = add;
+        const email = customerData.email;
 
         // Send transaction hash and other data to your backend
         const response = await axios.post(
-          "https://flipkartbackend-un9n.onrender.com/loginCustomer",
+          "https://flipkartbackend-un9n.onrender.com/loginDoctor",
           {
-            userWalletAddress,
+            email : email,
             pwd: pwd,
           }
         );
@@ -90,19 +90,20 @@ const LoginCustomer = () => {
       } catch (error) {
         console.log(error);
       }
-    } else {
-      await connectWallet();
-    }
-  };
+    } 
+    // else {
+    //   await connectWallet();
+    // }
+  
 
-  const getAllBusiness = async () => {
-    const response = await axios.get(
-      "https://flipkartbackend-un9n.onrender.com/getListOfBusiness"
-    );
+  // const getAllBusiness = async () => {
+  //   const response = await axios.get(
+  //     "https://flipkartbackend-un9n.onrender.com/getListOfBusiness"
+  //   );
 
-    // Handle the response from the backend
-    console.log(response.data); // This should contain user details and access token
-  };
+  //   // Handle the response from the backend
+  //   console.log(response.data); // This should contain user details and access token
+  // };
 
   return (
     <div className="w-screen h-screen  flex flex-col items-center gap-16">
@@ -133,18 +134,7 @@ const LoginCustomer = () => {
             required
           />
 
-          {/* <label htmlFor="wallet">Business Wallet Address</label>
-          <input
-            type="text"
-            id="wallet"
-            placeholder="Enter your wallet address"
-            value={businessData.businessWalletAddress}
-            onChange={(e) => setBusinessData({ ...businessData, businessWalletAddress: e.target.value })}
-            required
-          /> */}
-
-          {/* Add more input fields for other details */}
-
+          
           <div className="flex flex-col mt-6  gap-3">
             <motion.button
               whileTap={{ scale: 0.9 }}

@@ -24,11 +24,10 @@ const RegisterCustomer = () => {
     }, 1000);
   }, []);
   const [customerData, setCustomerData] = useState({
-    firstName: "",
-    lastName: "",
-    userEmail: "",
+    name: "",
+    email: "",
     pwd: "",
-    userWalletAddress: "",
+    
     // Add more fields as needed
   });
 
@@ -113,16 +112,16 @@ const RegisterCustomer = () => {
 
         // const pwd = customerData.pwd;
         // const userWalletAddress = add;
-        // const userEmail = customerData.userEmail;
-        // const firstName = customerData.firstName;
-        // const lastName = customerData.lastName;
+        const email = customerData.email;
+        const name = customerData.name;
+        const pwd = customerData.pwd;
 
         // Send transaction hash and other data to your backend
         const response = await axios.post(
           "https://flipkartbackend-un9n.onrender.com/registerDoctor",
           {
-            firstName,
-            userEmail,
+            name,
+            email,
             pwd: pwd,
           }
         );
@@ -164,11 +163,11 @@ const RegisterCustomer = () => {
                 type="text"
                 id="fName"
                 placeholder="Enter Doctor Name"
-                value={customerData.firstName}
+                value={customerData.name}
                 onChange={(e) =>
                   setCustomerData({
                     ...customerData,
-                    firstName: e.target.value,
+                    name: e.target.value,
                   })
                 }
                 required
@@ -178,11 +177,11 @@ const RegisterCustomer = () => {
                 type="email"
                 id="customerEmail"
                 placeholder="Enter Doctor Email"
-                value={customerData.userEmail}
+                value={customerData.email}
                 onChange={(e) =>
                   setCustomerData({
                     ...customerData,
-                    userEmail: e.target.value,
+                    email: e.target.value,
                   })
                 }
                 required
