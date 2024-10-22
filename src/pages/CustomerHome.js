@@ -95,7 +95,25 @@ function CustomerHome() {
   // }, []); // means at startup !!
 
 
-  const handleSubmit = ()=>{
+  const handleSubmit = async ()=>{
+
+    try{
+      const response = await axios.post(
+        "http://localhost:3000/getPatientData",
+        {
+          pId
+        }
+      );
+
+      // Handle the response from the backend
+      console.log(response.data); // This should contain user details and access token
+      
+      toast.success("Patient Data Retrieved Successfully");
+      navigate("/PatientData");
+    } catch (error) {
+      toast.error(error);
+      console.log(error);
+    }
 
 
   }
