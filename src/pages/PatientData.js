@@ -8,7 +8,7 @@ import LineChart from "./lineChart";
 import BarChart from "./barChart";
 import Loader from "./loader";
 import Navbar from "./Navbar";
-
+import { ToastContainer,toast } from "react-toastify";
 
 function PatientData() {
   const location=useLocation();
@@ -21,6 +21,12 @@ function PatientData() {
   const [businessess,setBusinessess]=useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
+  useEffect(()=>{
+    if(isLoading==false){
+        toast.success("Data Fetched Successfully !!");
+    }
+  },[isLoading])
+
   const predictDisease=async()=>{
     
     const url = "http://127.0.0.1:3002/predict_rfc";
@@ -192,6 +198,20 @@ function PatientData() {
 </div>
 
     </div>}
+        <ToastContainer
+            position="top-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+        />
+        {/* Same as */}
+        <ToastContainer />
     </div>
   );
 }

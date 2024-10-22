@@ -82,27 +82,34 @@ const RegisterBusiness = () => {
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner();
 
-        const contractAddress = "0x06441b211a8729B40FE15955F9A58b2F5829d022"; // Replace with your smart contract address
+        const contractAddress = "0xeBCd84C91a74A7b3a18ab02B246E57E89988Ab5A"; // Replace with your smart contract address
         const contractABI = Abi.contractABI; // Replace with your smart contract ABI
 
-        // const contract = new ethers.Contract(
-        //   contractAddress,
-        //   contractABI,
-        //   signer
-        // );
+        // Create a contract instance
+          const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
-        // const add = await signer.getAddress();
-        // const txResponse = await tx.wait();
-        // console.log("Transaction Response : ", txResponse.transactionHash);
-
-        // const hash = txResponse.transactionHash;
-        // const ltAddress = await contract.getBusinessCoin(add);
-        // console.log("LT Address:", ltAddress);
-
-        toast.success("Data File Uploaded !");
-        setDataFile("")
+          // Call the uploadData method
+          async function uploadPatientData(data) {
+              try {
+                
+                  setIsLoading(true);
+                  const transaction = await contract.uploadData(data); // Call the function
+                  console.log("Transaction sent! Hash:", transaction.hash); 
+                  await transaction.wait(); // Wait for the transaction to be mined
+                  console.log("Data uploaded successfully!", transaction);
+                  setIsLoading(false);
+                  toast.success("Data File Uploaded !");
+                  setDataFile("")
+              } catch (error) {
+                  setIsLoading(false);
+                  toast.error("Data File Upload Unsuccessfull !");
+                  setDataFile("")
+              }
+          }
+          const dataToUpload = "Sample patient data"; // Replace with the actual data you want to upload
+          await uploadPatientData(dataToUpload);
+          
       } catch (error) {
-        toast.error("Data File Upload Unsuccessfull !");
         console.log(error);
       }
     } else {
