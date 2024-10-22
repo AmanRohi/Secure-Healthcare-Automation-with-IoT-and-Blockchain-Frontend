@@ -1,80 +1,50 @@
-// LineChart.js
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const LineChart = ({ data }) => {
+function LineChart({ timeSeriesData }) {
   const chartRef = useRef(null);
-  const chartInstanceRef = useRef(null);
 
   useEffect(() => {
-    if (chartRef.current && data) {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-      createChart();
-    }
-  }, [data]);
-
-  const generateRandomColor = () => {
-    // Generate a random dark and colorful RGB color
-    const r = Math.floor(Math.random() * 96) + 160;
-    const g = Math.floor(Math.random() * 96) + 160;
-    const b = Math.floor(Math.random() * 96) + 160;
-    return `rgb(${r}, ${g}, ${b})`;
-  };
-
-  const createChart = () => {
-    const labels = data.map(item => item.label); // Adjust based on your data structure
-    const counts = data.map(item => item.value); // Adjust based on your data structure
-
-    const backgroundColor = generateRandomColor();
-    const borderColor = generateRandomColor();
-
     const ctx = chartRef.current.getContext('2d');
-    chartInstanceRef.current = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Line Dataset',
-          data: counts,
-          backgroundColor: backgroundColor,
-          borderColor: borderColor,
-          fill: false,
-          tension: 0.1, // Adjust tension for curve effect
-        }],
-      },
-      options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-          },
-          tooltip: {
-            enabled: true,
-          },
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Labels',
-            },
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Values',
-            },
-            beginAtZero: true,
-          },
-        },
-      },
-    });
-  };
 
-  return <canvas ref={chartRef} />;
-};
+    const data = {
+      labels: timeSeriesData.map(data => new Date(data.x).toLocaleString()), // Format timestamp if needed
+      datasets: [{
+        label: 'Device Readings',
+        data: timeSeriesData.map(data => data.y), // Extract the y values
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+        fill: false,
+      }]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // Disable aspect ratio to fill the canvas
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    };
+
+    const chart = new Chart(ctx, config);
+
+    return () => {
+      chart.destroy();
+    };
+  }, [timeSeriesData]);
+
+  return (
+    <div style={{ width: '400px', height: '350px' }}>
+      <canvas ref={chartRef} style={{ display: 'block' }} />
+    </div>
+  );
+}
 
 export default LineChart;

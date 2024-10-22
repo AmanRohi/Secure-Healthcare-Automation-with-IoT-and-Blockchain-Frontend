@@ -6,6 +6,8 @@ const BarChart = ({ data }) => {
   const chartInstanceRef = useRef(null);
 
   useEffect(() => {
+    console.log("data changed");
+    console.log(data);
     if (chartRef.current && data) {
       if (chartInstanceRef.current) {
         chartInstanceRef.current.destroy();
@@ -23,9 +25,10 @@ const BarChart = ({ data }) => {
   };
 
   const createChart = () => {
-    const labels = data.map(item => item.businessDetails.name);
-    const values = data.map(item => item.totalCount);
-
+    console.log("hello : ");
+    console.log(data);
+    const labels = data.map(item => item.x);
+    const values = data.map(item => item.y);
     const backgroundColors = new Array(data.length).fill(null).map(() => generateRandomColor());
 
     const ctx = chartRef.current.getContext('2d');
@@ -34,6 +37,7 @@ const BarChart = ({ data }) => {
       data: {
         labels: labels,
         datasets: [{
+          label: 'Current Device Readings',
           data: values,
           backgroundColor: backgroundColors,
         }],

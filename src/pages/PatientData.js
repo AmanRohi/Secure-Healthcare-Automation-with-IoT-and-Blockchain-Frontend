@@ -4,18 +4,19 @@ import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import DonutChart from "./donutChart";
-import LineChart from "./barChart";
+import LineChart from "./lineChart";
 import BarChart from "./barChart";
 import Loader from "./loader";
 import Navbar from "./Navbar";
 
+
 function PatientData() {
   const location=useLocation();
-  const data=location.state;
+  const response=location.state;
   const customer = useSelector((store) => store.customer);
   const [hashMap, setHashMap] = useState({
   });
-  const [response,setResponse]=useState(null);
+  const [selectedDevice,setSelectedDevice]=useState("device-1");
   
   const [businessess,setBusinessess]=useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,48 +27,7 @@ function PatientData() {
       setIsLoading(false);
     }, 3000);
     console.log("newly added data");
-    console.log(data);
-  }, []);
-
-  const getResponse = async () => {
-    const accessToken = customer.data.accessToken;
-    
-    console.log("Here it is : ",accessToken);
-    const rr = await axios.post(
-      "https://flipkartbackend-un9n.onrender.com/getUserDetails",{},
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-          // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGRkNDY3M2M2ODliMzRkMzY5ZmRlZGYiLCJyb2xlIjoiQ3VzdG9tZXIiLCJpYXQiOjE2OTIyMjMwOTF9.1WFN8JJAVQUkwFVr4a1GA1HfhyGFMFLPIoJHhLdeMpY`, // Provide your access token
-        },
-      }
-    );
-
-    
-    setResponse(rr.data);
-
-    const rr2 = await axios.post(
-      "https://flipkartbackend-un9n.onrender.com/getBusinessDetails/byUser",{
-        businessess:rr.data.loyaltyPoints
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-          // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGRkNDY3M2M2ODliMzRkMzY5ZmRlZGYiLCJyb2xlIjoiQ3VzdG9tZXIiLCJpYXQiOjE2OTIyMjMwOTF9.1WFN8JJAVQUkwFVr4a1GA1HfhyGFMFLPIoJHhLdeMpY`, // Provide your access token
-        },
-      }
-    );
-
-
-    setBusinessess(rr2.data);
-
-    console.log("Here I am With data : ",rr2.data);
-
-    console.log("I AM GOGO");
-
-  };
-  useEffect(() => {
-    //  getResponse();
+    console.log(response);
   }, []);
 
   const connectWallet = async () => {
@@ -83,13 +43,57 @@ function PatientData() {
     }
   };
 
+  const getTimeSeriesData = () => {
+    let timeSeriesData = [];
+    
+    response[0].readings.forEach(reading => {
+      const deviceId = reading.id;
+      
+      if (deviceId == selectedDevice) {
+        const lastTimestamp = new Date(reading.timestamp);
+        const finalValue = parseInt(reading.reading, 10);
+        
+        // Generate random data points
+        const points = [];
+        let currentTimestamp = new Date(lastTimestamp);
+        
+        // Create random values leading up to the last timestamp
+        for (let i = 0; i < 10; i++) {
+          const randomValue = Math.floor(Math.random() * (finalValue + 20)); // Random value between 0 and (finalValue + 20)
+          currentTimestamp.setHours(currentTimestamp.getHours() - 1); // Move back 1 hour for each point
+          points.push({ x: currentTimestamp.toISOString(), y: randomValue.toString() }); // Convert value to string
+        }
+    
+        // Add the final point
+        points.push({ x: lastTimestamp.toISOString(), y: finalValue.toString() }); // Convert value to string
+        
+        console.log("time series data : ");
+        console.log(points);
+        timeSeriesData = points;
+      }
+    });
+    
+    console.log(timeSeriesData);
+    return timeSeriesData;
+  };
+  
+  
+
+  const getIotDeviceData=()=>{
+    const readings = response[0].readings.map(reading => ({
+        x:reading.id,
+        y:parseInt(reading.reading, 10), // Convert reading to a number
+      }));
+    return readings;
+  }
+
   useEffect(() => {
     // connectWallet();
   }, []); // means at startup !!
   return (
     // <div>Hello</div>
     <div>
-    {response===null || isLoading===true ? <Loader/> : <div className="w-screen h-screen   flex flex-col items-center gap-4">
+    {isLoading===true ? <Loader/> : <div className="w-screen h-screen   flex flex-col items-center gap-4">
       <Navbar/>
       <div className="w-[95%]  bg-white p-5 rounded-md shadow-md shadow-gray-600  ">
         <div className="flex justify-between bg-indigo-500 px-4 py-3 shadow-md shadow-gray-300 rounded-md">
@@ -97,8 +101,8 @@ function PatientData() {
           <p className=" text-white text-[20px]">{response.age}</p>
         </div>
         <div style={{ display:'flex',width: '400px', height: '350px' }} className="mt-8 ml-[250px]">
-          <DonutChart data={businessess}></DonutChart>
-          <BarChart data={businessess}></BarChart>
+          <LineChart timeSeriesData={getTimeSeriesData()}></LineChart>
+          <BarChart data={getIotDeviceData()} ></BarChart>
         </div>
         <div className="mt-12   p-2 ">
           <p className="bg-blue-700 px-5 py-1 text-white w-max text-[20px] rounded-md shadow-md shadow-green-300">
