@@ -26,7 +26,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    connectWallet();
+    // connectWallet();
   }, []); // means at startup !!
 
   const navigate = useNavigate();

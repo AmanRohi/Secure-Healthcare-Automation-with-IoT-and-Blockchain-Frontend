@@ -10,6 +10,9 @@ import Navbar from "./Navbar";
 import PatientData from "./PatientData";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { ethers } from "ethers";
+import Abi from "./Abi";
+
 
 function CustomerHome() {
   const navigate = useNavigate();
@@ -66,6 +69,43 @@ function CustomerHome() {
           },
         }
       );
+
+      // Call blockchain !! 
+      await connectWallet();
+      if (window.ethereum) {
+        try {
+          // Request account access if needed
+          await window.ethereum.enable();
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          // Prompt user for account connections
+          await provider.send("eth_requestAccounts", []);
+          const signer = provider.getSigner();
+
+          const contractAddress = "0x06441b211a8729B40FE15955F9A58b2F5829d022"; // Replace with your smart contract address
+          const contractABI = Abi.contractABI; // Replace with your smart contract ABI
+
+          // const contract = new ethers.Contract(
+          //   contractAddress,
+          //   contractABI,
+          //   signer
+          // );
+
+          // const add = await signer.getAddress();
+          // const txResponse = await tx.wait();
+          // console.log("Transaction Response : ", txResponse.transactionHash);
+
+          // const hash = txResponse.transactionHash;
+          // const ltAddress = await contract.getBusinessCoin(add);
+          // console.log("LT Address:", ltAddress);
+
+          toast.success("Data Fetched Successfully !");
+        } catch (error) {
+          toast.error("Data Fetching Error !!");
+          console.log(error);
+        }
+      } else {
+        await connectWallet();
+      }
 
       // Handle the response from the backend
       console.log(response.data); // This should contain user details and access token
