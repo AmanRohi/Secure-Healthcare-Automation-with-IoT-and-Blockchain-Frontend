@@ -87,7 +87,6 @@ const LoginCustomer = () => {
         // Handle the response from the backend
         console.log(response.data); // This should contain user details and access token
         dispatch(setCustomer(response));
-        toast.success("Login Successfull");
         navigate("/customerHome");
       } catch (error) {
         toast.error(error);

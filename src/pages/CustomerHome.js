@@ -8,6 +8,7 @@ import LineChart from "./barChart";
 import BarChart from "./barChart";
 import Loader from "./loader";
 import Navbar from "./Navbar";
+import { ToastContainer, toast } from "react-toastify";
 
 function CustomerHome() {
   const navigate = useNavigate();
@@ -17,15 +18,21 @@ function CustomerHome() {
   const [response,setResponse]=useState(102);
   
   const [businessess,setBusinessess]=useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [pId, setPId] = useState(null);
+  const [pId, setPId] = useState("");
   useEffect(() => {
     // Simulate a loading delay
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
-  }, []);
+  },[]);
+
+  useEffect(()=>{
+    if(isLoading==false){
+      toast.success("Signed In Successfully");
+    }
+  },[isLoading])
 
   
 
@@ -110,7 +117,7 @@ function CustomerHome() {
             placeholder="Enter Patient Id"
             value={pId}
             onChange={(e) =>
-              setPId(e.target.value )
+              setPId(()=>e.target.value)
             }
             required
           />
@@ -141,6 +148,22 @@ function CustomerHome() {
       </div>
     </div>
     </div>}
+
+    <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
+
     </div>
   );
 }
