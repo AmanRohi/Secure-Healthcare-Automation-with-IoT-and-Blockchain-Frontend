@@ -46,7 +46,7 @@ const RegisterCustomer = () => {
   };
 
   useEffect(() => {
-    connectWallet();
+    // connectWallet();
   }, []); // means at startup !!
 
   // "0x1c9A0af0b1a14DaD32D93e9593740407Ac691BAe"
@@ -72,56 +72,55 @@ const RegisterCustomer = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await connectWallet();
-    if (window.ethereum) {
+
+    // await connectWallet();
+    // if (window.ethereum) {
       try {
         // Request account access if needed
-        await window.ethereum.enable();
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // Prompt user for account connections
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
+        // await window.ethereum.enable();
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        // // Prompt user for account connections
+        // await provider.send("eth_requestAccounts", []);
+        // const signer = provider.getSigner();
 
-        const contractAddress = "0x06441b211a8729B40FE15955F9A58b2F5829d022"; // Replace with your smart contract address
-        const contractABI = Abi.contractABI; // Replace with your smart contract ABI
+        // const contractAddress = "0x06441b211a8729B40FE15955F9A58b2F5829d022"; // Replace with your smart contract address
+        // const contractABI = Abi.contractABI; // Replace with your smart contract ABI
 
-        const contract = new ethers.Contract(
-          contractAddress,
-          contractABI,
-          signer
-        );
+        // const contract = new ethers.Contract(
+        //   contractAddress,
+        //   contractABI,
+        //   signer
+        // );
 
-        const add = await signer.getAddress();
+        // const add = await signer.getAddress();
 
-        const transaction = await contract.regCustomer(
-          customerData.firstName,
-          customerData.lastName,
-          customerData.userEmail,
-          add
-        );
+        // const transaction = await contract.regCustomer(
+        //   customerData.firstName,
+        //   customerData.lastName,
+        //   customerData.userEmail,
+        //   add
+        // );
 
-        const txResponse = await transaction.wait();
-        console.log("Transaction Response : ", txResponse.transactionHash);
+        // const txResponse = await transaction.wait();
+        // console.log("Transaction Response : ", txResponse.transactionHash);
 
-        const hash = txResponse.transactionHash;
+        // const hash = txResponse.transactionHash;
 
-        // userWalletAddress:req.body.userWalletAddress,
-        //   firstName:req.body.firstName,
-        //   lastName:req.body.lastName,
-        //   userEmail:req.body.userEmail,
+        // // userWalletAddress:req.body.userWalletAddress,
+        // //   firstName:req.body.firstName,
+        // //   lastName:req.body.lastName,
+        // //   userEmail:req.body.userEmail,
 
-        const pwd = customerData.pwd;
-        const userWalletAddress = add;
-        const userEmail = customerData.userEmail;
-        const firstName = customerData.firstName;
-        const lastName = customerData.lastName;
+        // const pwd = customerData.pwd;
+        // const userWalletAddress = add;
+        // const userEmail = customerData.userEmail;
+        // const firstName = customerData.firstName;
+        // const lastName = customerData.lastName;
 
         // Send transaction hash and other data to your backend
         const response = await axios.post(
-          "https://flipkartbackend-un9n.onrender.com/registerCustomer",
+          "https://flipkartbackend-un9n.onrender.com/registerDoctor",
           {
-            signedTransaction: hash,
-            userWalletAddress,
             firstName,
             userEmail,
             pwd: pwd,
@@ -135,9 +134,9 @@ const RegisterCustomer = () => {
       } catch (error) {
         console.log(error);
       }
-    } else {
-      await connectWallet();
-    }
+    // } else {
+    //   await connectWallet();
+    // }
   };
 
   const getAllBusiness = async () => {
