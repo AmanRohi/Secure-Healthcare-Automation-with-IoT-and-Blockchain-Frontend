@@ -80,7 +80,7 @@ function CustomerHome() {
           // Prompt user for account connections
           await provider.send("eth_requestAccounts", []);
           const signer = provider.getSigner();
-          const contractAddress = "0xeBCd84C91a74A7b3a18ab02B246E57E89988Ab5A"; // Replace with your smart contract address
+          const contractAddress = "0x35F37Bd9c5679F9F810747B9Aa68643F2583b0E3"; // Replace with your smart contract address
           const contractABI = Abi.contractABI; // Replace with your smart contract ABI
 
           // Create a contract instance
