@@ -6,8 +6,8 @@ const BarChart = ({ data }) => {
   const chartInstanceRef = useRef(null);
 
   useEffect(() => {
-    console.log("data changed");
-    console.log(data);
+    // console.log("data changed");
+    // console.log(data);
     if (chartRef.current && data) {
       if (chartInstanceRef.current) {
         chartInstanceRef.current.destroy();
@@ -25,8 +25,8 @@ const BarChart = ({ data }) => {
   };
 
   const createChart = () => {
-    console.log("hello : ");
-    console.log(data);
+    // console.log("hello : ");
+    // console.log(data);
     const labels = data.map(item => item.x);
     const values = data.map(item => item.y);
     const backgroundColors = new Array(data.length).fill(null).map(() => generateRandomColor());
