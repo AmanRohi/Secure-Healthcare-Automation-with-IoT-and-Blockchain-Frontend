@@ -13,6 +13,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Loader from "./loader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Papa from "papaparse"; // For parsing CSV files
+import * as XLSX from "xlsx"; // For parsing XLSX files
+
 const RegisterBusiness = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +34,76 @@ const RegisterBusiness = () => {
     tokenSymbol: "",
     // Add more fields as needed
   });
+
+  // const submitDataset=async()=>{
+  //   const ipfsApiUrl = 'http://127.0.0.1:5001/api/v0/add';
+
+  //   let data;
+  //   console.log(data);
+  
+  //   try {
+  //       // Create a FormData instance
+  //       const formData = new FormData();
+  
+  //       // Add the JSON data as a string
+  //       formData.append('file', JSON.stringify(data));
+  
+  //       // Send POST request to IPFS API
+  //       const response = await axios.post(ipfsApiUrl, formData, {
+  //           headers: formData.getHeaders(),
+  //       });
+  
+  //       if (response.status === 200) {
+  //           console.log(`JSON data stored in IPFS with CID: ${response.data.Hash}`);
+  //       } else {
+  //           console.error(`Failed to upload data: ${response.statusText}`);
+  //       }
+  //   } catch (error) {
+  //       console.error(`Error uploading data to IPFS: ${error.message}`);
+  //   }
+  
+  // }
+
+  const submitDataset = async () => {
+      // const ipfsApiUrl="/api/v0/add";
+        // Create a FormData instance
+        const formData = new FormData();
+
+        // Parse the uploaded file
+        let jsonData;
+        if (dataFile) {
+            console.log(dataFile);
+            // const file = document.getElementById("dataFile").files[0];
+            const file =dataFile;
+            // Check file type
+            if (file.name.endsWith(".csv")) {
+                const text = await file.text();
+                const parsedCSV = Papa.parse(text, { header: true });
+                jsonData = parsedCSV.data; // Array of objects
+            } else if (file.name.endsWith(".xlsx")) {
+                const arrayBuffer = await file.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: "array" });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                jsonData = XLSX.utils.sheet_to_json(worksheet); // Array of objects
+            } else {
+                toast.error("Unsupported file format! Please upload a .csv or .xlsx file.");
+                return;
+            }
+            console.log("Parsed JSON Data: ", jsonData);
+        } else {
+            toast.error("No file selected!");
+            return;
+        }
+
+        const response = await axios.post(
+          "http://localhost:3010/send_data",
+          jsonData,
+        );
+        window.alert(`IPFS HASH GENERATED : ${response.data['Ipfs-Hash']}`);
+      
+
+};
 
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -82,7 +155,7 @@ const RegisterBusiness = () => {
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner();
 
-        const contractAddress = "0xeBCd84C91a74A7b3a18ab02B246E57E89988Ab5A"; // Replace with your smart contract address
+        const contractAddress = "0x35F37Bd9c5679F9F810747B9Aa68643F2583b0E3"; // Replace with your smart contract address
         const contractABI = Abi.contractABI; // Replace with your smart contract ABI
 
         // Create a contract instance
@@ -91,7 +164,6 @@ const RegisterBusiness = () => {
           // Call the uploadData method
           async function uploadPatientData(data) {
               try {
-                
                   setIsLoading(true);
                   const transaction = await contract.uploadData(data); // Call the function
                   console.log("Transaction sent! Hash:", transaction.hash); 
@@ -99,16 +171,16 @@ const RegisterBusiness = () => {
                   console.log("Data uploaded successfully!", transaction);
                   setIsLoading(false);
                   toast.success("Data File Uploaded !");
-                  setDataFile("")
+                  setDataFile("");
               } catch (error) {
                   setIsLoading(false);
                   toast.error("Data File Upload Unsuccessfull !");
-                  setDataFile("")
+                  setDataFile("");
               }
           }
           const dataToUpload = "Sample patient data"; // Replace with the actual data you want to upload
           await uploadPatientData(dataToUpload);
-          
+          submitDataset();
       } catch (error) {
         console.log(error);
       }
@@ -143,7 +215,7 @@ const RegisterBusiness = () => {
             </h2>
             <form onSubmit={handleSubmit} className="p-12">
             <label>Upload Data File (.csv or .xlsx format)</label>
-              <input
+              {/* <input
                 type="file"
                 id="businessName"
                 placeholder="Upload in .csv or .xlsx format"
@@ -152,6 +224,13 @@ const RegisterBusiness = () => {
                   setDataFile(()=>e.target.value)
                 }
                 required
+              /> */}
+              <input
+                  type="file"
+                  id="dataFile"
+                  accept=".csv,.xlsx"
+                  onChange={(e) => {  console.log(dataFile); return setDataFile(e.target.files[0]); } }
+                  required
               />
 
               {/* <label htmlFor="wallet">Business Wallet Address</label>
