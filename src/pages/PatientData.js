@@ -96,9 +96,16 @@ function PatientData() {
     }
   };
 
-  const getTimeSeriesData = () => {
+  const getTimeSeriesData = async() => {
     let timeSeriesData = [];
-    
+    const id=123;
+    const response = await fetch(`http://localhost:3010/get_data?id=${id}`); // Replace with your backend URL
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+    const result = await response.json();
+    console.log(result);
+
     response[0].readings.forEach(reading => {
       const deviceId = reading.id;
       
